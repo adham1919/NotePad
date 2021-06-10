@@ -227,7 +227,7 @@ JColorChooser bcolorChooser=null;
 JColorChooser fcolorChooser=null;
 JDialog backgroundDialog=null;
 JDialog foregroundDialog=null;
-JMenuItem cutItem,copyItem, deleteItem, findItem, findNextItem, replaceItem, gotoItem, selectAllItem;
+JMenuItem cutItem,copyItem, deleteItem, findItem, findNextItem, replaceItem, gotoItem, selectAllItem, readOnlyItem;
 /****************************/
 Notepad()
 {
@@ -388,8 +388,10 @@ else if(cmdText.equals(editSelectAll))
 	ta.selectAll();
 ////////////////////////////////////
 else if(cmdText.equals(editTimeDate))
-	ta.insert(new Date().toString(),ta.getSelectionStart());
+{
+	if(ta.isEditable()){ta.insert(new Date().toString(),ta.getSelectionStart());}
 ////////////////////////////////////
+}
 else if(cmdText.equals(formatWordWrap))
 {
 JCheckBoxMenuItem temp=(JCheckBoxMenuItem)ev.getSource();
@@ -421,6 +423,10 @@ statusBar.setVisible(temp.isSelected());
 else if(cmdText.equals(helpAboutNotepad))
 {
 JOptionPane.showMessageDialog(Notepad.this.f,aboutText,"Dedicated 2 u!",JOptionPane.INFORMATION_MESSAGE);
+}
+else if(cmdText.equals(editSetReadOnly)){
+	JCheckBoxMenuItem temp = (JCheckBoxMenuItem)ev.getSource();
+	ta.setEditable(!temp.isSelected());
 }
 else
 	statusBar.setText("This "+cmdText+" command is yet to be implemented");
@@ -540,6 +546,10 @@ gotoItem=createMenuItem(editGoTo,KeyEvent.VK_G,editMenu,KeyEvent.VK_G,this);
 editMenu.addSeparator();
 selectAllItem=createMenuItem(editSelectAll,KeyEvent.VK_A,editMenu,KeyEvent.VK_A,this);
 createMenuItem(editTimeDate,KeyEvent.VK_D,editMenu,this).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5,0));
+editMenu.addSeparator();
+createCheckBoxMenuItem(editSetReadOnly,KeyEvent.VK_F4,editMenu,this).setSelected(false);
+//readOnlyItem = createMenuItem(editSetReadOnly,KeyEvent.VK_F4,editMenu,this);
+//HERE OMAR WRITE HERE
 
 createCheckBoxMenuItem(formatWordWrap,KeyEvent.VK_W,formatMenu,this);
 
@@ -633,6 +643,7 @@ final String editReplace="Replace";
 final String editGoTo="Go To...";
 final String editSelectAll="Select All";
 final String editTimeDate="Time/Date";
+final String editSetReadOnly = "Set Read-Only";
 
 final String formatWordWrap="Word Wrap";
 final String formatFont="Font...";
